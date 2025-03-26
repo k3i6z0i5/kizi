@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8; /* Light gray background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+        }
+        .container {
+            text-align: center;
+            background-color: #ffffff; /* White background for the container */
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 350px; /* Fixed width for the container */
+        }
+        h2 {
+            color: #333; /* Dark gray for the heading */
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: calc(100% - 22px); /* Full width minus padding */
+            border: 2px solid #00796b; /* Teal border */
+            border-radius: 4px;
+            margin-bottom: 10px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #004d40; /* Darker teal on focus */
+            outline: none;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #00796b; /* Teal background */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #004d40; /* Darker teal on hover */
+        }
+        .weather-box {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #00796b; /* Teal border */
+            border-radius: 4px;
+            background-color: #e0f2f1; /* Light teal background */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            width: 75%; /* Full width of the container */
+            text-align: left;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .weather-info {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Weather Forecast</h2>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="weather" class="weather-box"></div>
+    </div>
+
+    <script>
+        async function getWeather() {
+            const city = document.getElementById("city").value.trim();
+            const apiKey = "4a6b494e962fc032afc81e940b56bbd0"; // Replace with your actual WeatherStack API key
+            const url = `http://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`;
+
+            try {
+                let response = await fetch(url);
+                let data = await response.json();
+
+                // Check for API error
+                if (data.error) {
+                    throw new Error(data.error.info); // Show API error message
+                }
+
+                // Update UI with weather data
+                document.getElementById("weather").innerHTML = `
+                    <h3>${data.location.name}, ${data.location.country}</h3>
+                    <p class="weather-info">Temperature: ${data.current.temperature}°C</p>
+                    <p class="weather-info">Weather: ${data.current.weather_descriptions[0]}</p>
+                    <p class="weather-info">Humidity: ${data.current.humidity}%</p>
+                    <p class="weather-info">Wind Speed: ${data.current.wind_speed} km/h</p>
+                `;
+            } catch (error) {
+                document.getElementById("weather").innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>

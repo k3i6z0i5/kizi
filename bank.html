@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            width: 45%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .withdraw {
+            background-color: #dc3545;
+        }
+        .withdraw:hover {
+            background-color: #c82333;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bank Account</h1>
+        <div>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" min="0" step="0.01">
+        </div>
+        <div>
+            <button onclick="deposit()">Deposit</button>
+            <button class="withdraw" onclick="withdraw()">Withdraw</button>
+        </div>
+        <h2>Current Balance: $<span id="balance">0.00</span></h2>
+    </div>
+
+    <script>
+        let balance = 0;
+
+        function updateBalanceDisplay() {
+            document.getElementById('balance').innerText = balance.toFixed(2);
+        }
+
+        function deposit() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid amount to deposit.");
+                return;
+            }
+            balance += amount;
+            updateBalanceDisplay();
+            document.getElementById('amount').value = ''; // Clear input
+        }
+
+        function withdraw() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid amount to withdraw.");
+                return;
+            }
+            if (amount > balance) {
+                alert("Insufficient funds.");
+                return;
+            }
+            balance -= amount;
+            updateBalanceDisplay();
+            document.getElementById('amount').value = ''; // Clear input
+        }
+    </script>
+</body>
+</html>
